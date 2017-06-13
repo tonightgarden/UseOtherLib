@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PlayGo</string>
+
+    <string name="navigation_drawer_open">打开</string>
+    <string name="navigation_drawer_close">关闭</string>
+    <string name="action_settings">设置</string>
+
+    <string name="scale_down_show_behavior">com.example.tg.useotherlib.widget.behavior.ScaleDownShowBehavior</string>
+
+</resources>
