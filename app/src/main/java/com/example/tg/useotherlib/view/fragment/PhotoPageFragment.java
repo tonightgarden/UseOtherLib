@@ -1,17 +1,21 @@
 package com.example.tg.useotherlib.view.fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.tg.useotherlib.R;
 import com.example.tg.useotherlib.bean.PhotoBean;
+import com.example.tg.useotherlib.view.activtiy.PhotoViewActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,6 +23,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
@@ -30,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,6 +52,9 @@ import okhttp3.Response;
  */
 
 public class PhotoPageFragment extends BaseFragment {
+
+    public static final String  KEY_PHOTO_DATA= "photo_data";
+    public static final String  KEY_PHOTO_INDEX= "photo_index";
 
     private  static final String PHOTO_URL = "http://gank.io/api/data/福利/10/";
 
@@ -86,8 +95,8 @@ public class PhotoPageFragment extends BaseFragment {
             }
         });
 
-//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         mAdapter = new CommonAdapter<PhotoBean>(getActivity(),R.layout.item_photo,dataList) {
             @Override
@@ -103,6 +112,24 @@ public class PhotoPageFragment extends BaseFragment {
             }
         };
 
+        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent mIntent = new Intent(getActivity(), PhotoViewActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putInt(KEY_PHOTO_INDEX,position);
+                bundle.putSerializable(KEY_PHOTO_DATA,(Serializable)dataList);
+                mIntent.putExtras(bundle);
+                startActivity(mIntent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+
+
         mLoadMoreWrapper = new LoadMoreWrapper(mAdapter);
         mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
         mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener()
@@ -117,6 +144,7 @@ public class PhotoPageFragment extends BaseFragment {
         mLoadMoreWrapper.setLoadMoreView(0);
 
         mRecyclerView.setAdapter(mLoadMoreWrapper);
+
 
     }
 

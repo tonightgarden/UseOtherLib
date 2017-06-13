@@ -1,10 +1,12 @@
 package com.example.tg.useotherlib.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by tg on 2017/6/12.
  */
 
-public class PhotoBean {
+public class PhotoBean implements Serializable {
 
     /**
      * _id : 5939fcb1421aa92c7be61bd5
