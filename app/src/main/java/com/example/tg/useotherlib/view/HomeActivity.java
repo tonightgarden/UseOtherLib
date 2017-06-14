@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.tg.useotherlib.R;
+import com.example.tg.useotherlib.utils.CleanLeakUtils;
+import com.example.tg.useotherlib.view.fragment.ArticlePageFragment;
 import com.example.tg.useotherlib.view.fragment.PhotoPageFragment;
 import com.orhanobut.logger.Logger;
 
@@ -34,6 +36,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private FragmentManager fragmentManager;
     private PhotoPageFragment mPhotoPageFragment;
+    private ArticlePageFragment mArticlePageFragment;
 
     @OnClick(R.id.fab)
     public void floatButtonClick()
@@ -67,6 +70,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         fragmentManager = getSupportFragmentManager();
         initFragment(savedInstanceState);
+
+        MenuItem item = navigationView.getMenu().getItem(0);
+        item.setChecked(true);
+        onNavigationItemSelected(item);
 
     }
 
@@ -120,6 +127,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_send) {
 
         }
+        Logger.i("Title : "+item.getTitle());
         changeFragmentShowIndex(id);
         toolbar.setTitle(item.getTitle());
         drawer.closeDrawer(GravityCompat.START);
@@ -139,6 +147,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     transaction.show(mPhotoPageFragment);
                 }
                 break;
+            case R.id.nav_news:
+                if (mArticlePageFragment == null) {
+                    mArticlePageFragment = new ArticlePageFragment();
+                    transaction.add(R.id.fragment_content, mArticlePageFragment,
+                            ArticlePageFragment.class.getName());
+                } else {
+                    transaction.show(mArticlePageFragment);
+                }
+                break;
         }
         transaction.commit();
     }
@@ -147,6 +164,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (mPhotoPageFragment != null) {
             transaction.hide(mPhotoPageFragment);
         }
+        if(mArticlePageFragment!=null)
+        {
+            transaction.hide(mArticlePageFragment);
+        }
     }
 
     private void initFragment(Bundle savedInstanceState) {
@@ -154,10 +175,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState != null) {
             mPhotoPageFragment = (PhotoPageFragment) fragmentManager
                     .findFragmentByTag(PhotoPageFragment.class.getName());
+            mArticlePageFragment = (ArticlePageFragment) fragmentManager
+                    .findFragmentByTag(ArticlePageFragment.class.getName());
         } else {
 
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        CleanLeakUtils.fixInputMethodManagerLeak(this);
+        super.onDestroy();
+    }
 }

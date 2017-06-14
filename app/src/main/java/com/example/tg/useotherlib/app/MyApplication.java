@@ -3,6 +3,8 @@ package com.example.tg.useotherlib.app;
 import android.app.Application;
 import android.util.Log;
 
+import com.blankj.utilcode.util.CrashUtils;
+import com.blankj.utilcode.util.Utils;
 import com.example.tg.useotherlib.BuildConfig;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -65,7 +67,13 @@ public class MyApplication extends Application {
 
         OkHttpUtils.initClient(okHttpClient);
 
+        Utils.init(this);
+        initCrash();
 
+    }
+
+    private void initCrash() {
+        CrashUtils.init();
     }
 
     private static class CrashReportingTree extends Timber.Tree {

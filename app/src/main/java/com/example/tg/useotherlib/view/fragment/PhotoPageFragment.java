@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -25,6 +26,7 @@ import com.orhanobut.logger.Logger;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.EmptyWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import org.json.JSONArray;
@@ -68,6 +70,7 @@ public class PhotoPageFragment extends BaseFragment {
 
     private CommonAdapter<PhotoBean> mAdapter;
     private LoadMoreWrapper mLoadMoreWrapper;
+    private EmptyWrapper mEmptyWrapper;
     List<PhotoBean> dataList = new ArrayList<PhotoBean>() ;
 
 
@@ -94,6 +97,7 @@ public class PhotoPageFragment extends BaseFragment {
                 refresh();
             }
         });
+
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 //        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -129,8 +133,8 @@ public class PhotoPageFragment extends BaseFragment {
             }
         });
 
-
-        mLoadMoreWrapper = new LoadMoreWrapper(mAdapter);
+        initEmptyView();
+        mLoadMoreWrapper = new LoadMoreWrapper(mEmptyWrapper);
         mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
         mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener()
         {
@@ -143,10 +147,18 @@ public class PhotoPageFragment extends BaseFragment {
         });
         mLoadMoreWrapper.setLoadMoreView(0);
 
+
         mRecyclerView.setAdapter(mLoadMoreWrapper);
 
 
     }
+
+    private void initEmptyView()
+    {
+        mEmptyWrapper = new EmptyWrapper(mAdapter);
+        mEmptyWrapper.setEmptyView(LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, mRecyclerView, false));
+    }
+
 
     @Override
     public void quickToTop() {
