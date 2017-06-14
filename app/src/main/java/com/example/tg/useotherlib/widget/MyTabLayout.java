@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  */
 
 public class MyTabLayout extends TabLayout {
-    private static final int TabViewNumber = 4;
+    private static final int TabViewNumber = 3;
     private static final String SCROLLABLE_TAB_MIN_WIDTH = "mScrollableTabMinWidth";
     public MyTabLayout(Context context) {
         super(context);
