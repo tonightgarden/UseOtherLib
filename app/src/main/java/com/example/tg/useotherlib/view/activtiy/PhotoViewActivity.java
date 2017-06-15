@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.orhanobut.logger.Logger;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +110,13 @@ public class PhotoViewActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.photo_menu, menu);
+        setIconsVisible(menu,true);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -116,6 +125,25 @@ public class PhotoViewActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void setIconsVisible(Menu menu, boolean flag) {
+        //判断menu是否为空
+        if(menu != null) {
+            try {
+                //如果不为空,就反射拿到menu的setOptionalIconsVisible方法
+                Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                //暴力访问该方法
+                method.setAccessible(true);
+                //调用该方法显示icon
+                method.invoke(menu, flag);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
     static class SamplePagerAdapter extends PagerAdapter {
 

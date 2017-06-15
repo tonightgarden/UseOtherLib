@@ -1,5 +1,6 @@
 package com.example.tg.useotherlib.view;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,6 +20,9 @@ import android.view.View;
 
 import com.example.tg.useotherlib.R;
 import com.example.tg.useotherlib.utils.CleanLeakUtils;
+import com.example.tg.useotherlib.view.activtiy.AboutActivity;
+import com.example.tg.useotherlib.view.activtiy.BaseActivity;
+import com.example.tg.useotherlib.view.activtiy.SettingActivity;
 import com.example.tg.useotherlib.view.fragment.ArticlePageFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
 import com.example.tg.useotherlib.view.fragment.PhotoPageFragment;
@@ -112,23 +116,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         mCurrentID = id;
 
-        if (id == R.id.nav_news) {
-            // Handle the camera action
-        } else if (id == R.id.nav_photo) {
-
-        } else if (id == R.id.nav_video) {
-
-        } else if (id == R.id.nav_funny) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
         Logger.i("Title : "+item.getTitle());
-        changeFragmentShowIndex(id,item.getTitle().toString());
-//        toolbar.setTitle(item.getTitle());
-        getSupportActionBar().setTitle(item.getTitle());
+
+        if (id == R.id.nav_about) {
+            startActivity(new Intent(this, AboutActivity.class).putExtra(BaseActivity.TITLE,item.getTitle()));
+
+        } else if (id == R.id.nav_setting) {
+            startActivity(new Intent(this, SettingActivity.class).putExtra(BaseActivity.TITLE,item.getTitle()));
+
+        }else
+        {
+            changeFragmentShowIndex(id,item.getTitle().toString());
+            getSupportActionBar().setTitle(item.getTitle());
+        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

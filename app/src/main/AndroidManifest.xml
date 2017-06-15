@@ -3,9 +3,9 @@
     package="com.example.tg.useotherlib">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--读写内存-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 读写内存 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".app.MyApplication"
@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activtiy.PhotoViewActivity"></activity>
+        <activity android:name=".view.activtiy.PhotoViewActivity" />
+        <activity android:name=".view.activtiy.AboutActivity" />
+        <activity android:name=".view.activtiy.SettingActivity"></activity>
     </application>
 
 </manifest>
