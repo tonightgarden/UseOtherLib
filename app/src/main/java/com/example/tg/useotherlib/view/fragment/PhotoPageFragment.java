@@ -111,7 +111,7 @@ public class PhotoPageFragment extends BaseFragment {
 
                 Glide.with(PhotoPageFragment.this)
                         .load(photoBean.getUrl())
-                        .placeholder(R.drawable.photo)
+                        .placeholder(R.drawable.emptyimage)
                         .into(image);
             }
         };

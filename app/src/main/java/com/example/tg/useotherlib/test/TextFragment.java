@@ -28,9 +28,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tg.useotherlib.R;
+import com.example.tg.useotherlib.bean.GanHuo;
 import com.example.tg.useotherlib.view.fragment.BaseArticleFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
 import com.orhanobut.logger.Logger;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import butterknife.BindView;
 
@@ -57,6 +59,16 @@ public class TextFragment extends BaseArticleFragment {
     }
 
     @Override
+    protected void myconvert(ViewHolder holder, GanHuo ganHuo, int position) {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
     protected void initViews() {
          text = getArguments().getString(TYPE);
         textView.setText(text);
@@ -67,6 +79,8 @@ public class TextFragment extends BaseArticleFragment {
     public void quickToTop() {
 
     }
+
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

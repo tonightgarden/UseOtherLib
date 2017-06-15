@@ -14,6 +14,7 @@
         app:tabTextColor="@android:color/white"
         app:tabIndicatorHeight="2dp"
         app:tabMode="scrollable"
+        android:textColorLink="?attr/colorPrimaryDark"
         android:background="@color/colorPrimary"
         />
 

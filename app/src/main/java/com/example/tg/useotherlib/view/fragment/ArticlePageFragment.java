@@ -4,10 +4,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 
 import com.example.tg.useotherlib.R;
 import com.example.tg.useotherlib.test.TextFragment;
 import com.example.tg.useotherlib.widget.MyTabLayout;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 
@@ -22,6 +24,10 @@ public class ArticlePageFragment extends BaseFragment {
 
     private  int mCurrentPosition;
 
+    FragmentPagerAdapter mAdpter;
+
+    GanHuoPageFragment currentFragment;
+
 
     @Override
     protected int getViewLayoutID() {
@@ -31,12 +37,12 @@ public class ArticlePageFragment extends BaseFragment {
     @Override
     protected void initViews() {
 
-        mViewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
-            String[] types = {"Topics", "News", "Sites", "Test","Test1","Test2","Test3","Test4"};
+        mAdpter =new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+            String[] types = {"all", "Android", "iOS","休息视频","前端","拓展资源","App","瞎推荐"};
 
             @Override
             public Fragment getItem(int position) {
-                return TextFragment.newInstance(types[position]);
+                return GanHuoPageFragment.newInstance(types[position]);
             }
 
             @Override
@@ -48,7 +54,15 @@ public class ArticlePageFragment extends BaseFragment {
             public CharSequence getPageTitle(int position) {
                 return types[position];
             }
-        });
+
+            @Override
+            public void setPrimaryItem(ViewGroup container, int position, Object object) {
+                currentFragment = (GanHuoPageFragment) object;
+                super.setPrimaryItem(container, position, object);
+            }
+        };
+
+        mViewPager.setAdapter(mAdpter);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -65,7 +79,7 @@ public class ArticlePageFragment extends BaseFragment {
             }
         });
 
-        mCurrentPosition = 1;
+        mCurrentPosition = 0;
         mViewPager.setCurrentItem(mCurrentPosition);
 
         mTablayout.setupWithViewPager(mViewPager);
@@ -74,6 +88,7 @@ public class ArticlePageFragment extends BaseFragment {
 
     @Override
     public void quickToTop() {
-
+        Logger.d(" news quickToTop " );
+        currentFragment.quickToTop();
     }
 }

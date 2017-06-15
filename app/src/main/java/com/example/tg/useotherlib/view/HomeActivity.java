@@ -45,15 +45,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     {
         Logger.d("floatButtonClick");
         Fragment currentFragment = fragmentManager.findFragmentByTag(currentFragmentTag);
-        switch (mCurrentID) {
-            case R.id.nav_photo:
-
                 if (currentFragment != null) {
                     ((BaseFragment)currentFragment).quickToTop();
-                }
-                break;
         }
-
     }
 
     private  int mCurrentID =-1;
@@ -133,7 +127,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         Logger.i("Title : "+item.getTitle());
         changeFragmentShowIndex(id,item.getTitle().toString());
-        toolbar.setTitle(item.getTitle());
+//        toolbar.setTitle(item.getTitle());
+        getSupportActionBar().setTitle(item.getTitle());
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

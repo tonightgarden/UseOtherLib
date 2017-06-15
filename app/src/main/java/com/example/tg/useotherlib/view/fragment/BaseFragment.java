@@ -31,6 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -53,6 +55,7 @@ public abstract class BaseFragment extends Fragment {
 
         View view = inflater.inflate(getViewLayoutID(), container, false);
         unbinder = ButterKnife.bind(this, view);
+        initViews();
         return view;
 
     }
@@ -63,11 +66,9 @@ public abstract class BaseFragment extends Fragment {
 
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initViews();
     }
 
     @Override public void onDestroyView() {
