@@ -6,8 +6,7 @@ import java.util.List;
  * Created by tg on 2017/6/15.
  */
 
-public class GanHuo {
-
+public class GanHuo extends Data{
 
     /**
      * _id : 593f211a421aa92c7be61c02

@@ -25,7 +25,8 @@
         </activity>
         <activity android:name=".view.activtiy.PhotoViewActivity" />
         <activity android:name=".view.activtiy.AboutActivity" />
-        <activity android:name=".view.activtiy.SettingActivity"></activity>
+        <activity android:name=".view.activtiy.SettingActivity" />
+        <activity android:name=".view.activtiy.TypeVideosActivity"></activity>
     </application>
 
 </manifest>

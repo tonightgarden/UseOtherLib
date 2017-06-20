@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.tg.useotherlib.R;
+import com.example.tg.useotherlib.bean.Data;
 import com.example.tg.useotherlib.bean.GanHuo;
 import com.example.tg.useotherlib.bean.PhotoBean;
 import com.example.tg.useotherlib.view.activtiy.PhotoViewActivity;
@@ -47,11 +48,7 @@ import okhttp3.Response;
  * Created by tg on 2017/6/14.
  */
 
-public abstract class BaseArticleFragment extends BaseFragment{
-
-
-    private  static final String URL = "http://gank.io/api/data/";
-    private  static final String URL_NUMBER = "/10/";
+public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
 
     protected String type="";
 
@@ -63,15 +60,21 @@ public abstract class BaseArticleFragment extends BaseFragment{
 
     OkHttpClient client = new OkHttpClient();
 
-    private int currentPage =0;
+    protected int currentPage =0;
 
-    private CommonAdapter<GanHuo> mAdapter;
+    protected boolean isCanLoadMore = true;
+
+    private CommonAdapter<T> mAdapter;
     private LoadMoreWrapper mLoadMoreWrapper;
     private EmptyWrapper mEmptyWrapper;
-    List<GanHuo> dataList = new ArrayList<GanHuo>() ;
+    protected  List<T> dataList = new ArrayList<T>() ;
 
-    protected  abstract  void myconvert(ViewHolder holder, GanHuo ganHuo, int position);
+    protected  abstract  void myconvert(ViewHolder holder, T item, int position);
     protected  abstract  int getLayoutId();
+    protected  abstract  List<T> secondResloveData(String data);
+    protected  abstract  void onMyItemClick(View view, RecyclerView.ViewHolder holder, int position);
+    protected  abstract  RecyclerView.LayoutManager getLayouManager();
+    protected  abstract  String getLoadURL();
 
 
 
@@ -97,23 +100,16 @@ public abstract class BaseArticleFragment extends BaseFragment{
                 }
             });
 
-
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            mRecyclerView.setLayoutManager(getLayouManager());
+//            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//          mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 //        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-            mAdapter = new CommonAdapter<GanHuo>(getActivity(),getLayoutId(),dataList) {
+            mAdapter = new CommonAdapter<T>(getActivity(),getLayoutId(),dataList) {
                 @Override
-                protected void convert(ViewHolder holder, GanHuo ganHuo, int position) {
+                protected void convert(ViewHolder holder, T item, int position) {
 
-//                holder.setText(R.id.photoName,photoBean.getWho());
-//                    ImageView image = holder.getView(R.id.imagePhoto);
-//
-//                    Glide.with(PhotoPageFragment.this)
-//                            .load(photoBean.getUrl())
-//                            .placeholder(R.drawable.photo)
-//                            .into(image);
-                    myconvert( holder,  ganHuo,  position);
+                    myconvert( holder,  item,  position);
                 }
             };
 
@@ -121,13 +117,7 @@ public abstract class BaseArticleFragment extends BaseFragment{
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
 
-                    GanHuo ganhuo = dataList.get(position);
-                    Logger.d("click : "+ganhuo);
-                        Intent intent = new Intent();
-                        intent.setAction("android.intent.action.VIEW");
-                        Uri content_url = Uri.parse(ganhuo.getUrl());
-                        intent.setData(content_url);
-                        startActivity(intent);
+                    onMyItemClick(view,holder,position);
                 }
 
                 @Override
@@ -206,12 +196,12 @@ public abstract class BaseArticleFragment extends BaseFragment{
 
     void lazyFetchData()
     {
-        new BaseArticleFragment.MyTask().execute(URL+type+URL_NUMBER+(currentPage+1));
+        new MyTask().execute(getLoadURL());
     }
 
 
 
-    private class MyTask extends AsyncTask<String,Integer,String>
+    public class MyTask extends AsyncTask<String,Integer,String>
     {
         @Override
         protected void onPreExecute() {
@@ -251,26 +241,11 @@ public abstract class BaseArticleFragment extends BaseFragment{
 
     private void resloveData(String data) {
 
-        List<GanHuo> tempList = new ArrayList<GanHuo>() ;
+        List<T> tempList = null;
 
         if(data!=null)
         {
-            try {
-                JSONObject jsonObject=  new JSONObject(data);
-                boolean error = jsonObject.getBoolean("error");
-                if(!error)
-                {
-                    Gson gson = new Gson();
-                    JSONArray resultJsonArray = jsonObject.getJSONArray("results");
-                    JsonArray array = new JsonParser().parse(resultJsonArray.toString()).getAsJsonArray();
-                    for(final JsonElement elem : array){
-                        tempList.add(gson.fromJson(elem, GanHuo.class));
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            tempList =secondResloveData(data);
         }
         else
         {
@@ -278,10 +253,10 @@ public abstract class BaseArticleFragment extends BaseFragment{
             mLoadMoreWrapper.setLoadMoreView(0);
             mLoadMoreWrapper.notifyDataSetChanged();
         }
-
-        Logger.d(tempList.size());
-        Logger.d(tempList);
-
+        if(tempList==null)
+        {
+            return;
+        }
         if(tempList.size()!=0)
         {
             currentPage++;
@@ -290,9 +265,11 @@ public abstract class BaseArticleFragment extends BaseFragment{
                 dataList.clear();
             }
             dataList.addAll(tempList);
-            mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
+            if(isCanLoadMore)
+            {
+                mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
+            }
             mLoadMoreWrapper.notifyDataSetChanged();
-
         }
         tempList.clear();
     }

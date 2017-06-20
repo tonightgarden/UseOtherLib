@@ -26,6 +26,7 @@ import com.example.tg.useotherlib.view.activtiy.SettingActivity;
 import com.example.tg.useotherlib.view.fragment.ArticlePageFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
 import com.example.tg.useotherlib.view.fragment.PhotoPageFragment;
+import com.example.tg.useotherlib.view.fragment.VideoPageFragment;
 import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
@@ -155,6 +156,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_news:
                     foundFragment = new ArticlePageFragment();
                     break;
+                case R.id.nav_video:
+                    foundFragment = new VideoPageFragment();
+
             }
         }
 

@@ -24,15 +24,19 @@ package com.example.tg.useotherlib.test;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.tg.useotherlib.R;
+import com.example.tg.useotherlib.bean.Data;
 import com.example.tg.useotherlib.bean.GanHuo;
 import com.example.tg.useotherlib.view.fragment.BaseArticleFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
 import com.orhanobut.logger.Logger;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -58,14 +62,35 @@ public class TextFragment extends BaseArticleFragment {
 
     }
 
+
     @Override
-    protected void myconvert(ViewHolder holder, GanHuo ganHuo, int position) {
+    protected void myconvert(ViewHolder holder, Data item, int position) {
 
     }
 
     @Override
     protected int getLayoutId() {
         return 0;
+    }
+
+    @Override
+    protected List secondResloveData(String data) {
+        return null;
+    }
+
+    @Override
+    protected void onMyItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager getLayouManager() {
+        return null;
+    }
+
+    @Override
+    protected String getLoadURL() {
+        return null;
     }
 
     @Override
