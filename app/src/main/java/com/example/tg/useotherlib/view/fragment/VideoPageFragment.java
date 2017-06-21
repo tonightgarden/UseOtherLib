@@ -111,6 +111,7 @@ public class VideoPageFragment extends BaseArticleFragment <VideoRes> {
         startActivity(new Intent(getActivity(), TypeVideosActivity.class).putExtra(BaseActivity.TITLE,videoRes.getTitle())
         .putExtra(TypeVideosActivity.TYPE_ID,TypeVideosActivity.getCatalogId(videoRes.getMoreURL()))
         );
+        Logger.i(TypeVideosActivity.getCatalogId(videoRes.getMoreURL()));
 
     }
 

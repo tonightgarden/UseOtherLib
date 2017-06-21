@@ -26,7 +26,10 @@
         <activity android:name=".view.activtiy.PhotoViewActivity" />
         <activity android:name=".view.activtiy.AboutActivity" />
         <activity android:name=".view.activtiy.SettingActivity" />
-        <activity android:name=".view.activtiy.TypeVideosActivity"></activity>
+        <activity android:name=".view.activtiy.TypeVideosActivity" />
+        <activity android:name=".view.activtiy.VideoInfoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            ></activity>
     </application>
 
 </manifest>

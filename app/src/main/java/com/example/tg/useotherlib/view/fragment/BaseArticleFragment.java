@@ -12,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.tg.useotherlib.R;
@@ -28,6 +29,7 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.EmptyWrapper;
+import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import org.json.JSONArray;
@@ -60,9 +62,13 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
 
     OkHttpClient client = new OkHttpClient();
 
-    protected int currentPage =0;
+    protected int DEFAULT_PAGE = 0;
+
+    protected int currentPage =DEFAULT_PAGE;
 
     protected boolean isCanLoadMore = true;
+
+    private boolean isLoadFinish = true;
 
     private CommonAdapter<T> mAdapter;
     private LoadMoreWrapper mLoadMoreWrapper;
@@ -77,13 +83,12 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
     protected  abstract  String getLoadURL();
 
 
-
-
+    protected HeaderAndFooterWrapper mHeaderAndFooterWrapper ;
 
     @Override
     protected void initViews() {
         {
-           Logger.i("initViews   "+type);
+            Logger.i("initViews   "+type);
             mSwipeRefreshLayout.setProgressViewOffset(false, -20, 80);
             mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
             mSwipeRefreshLayout.setEnabled(true);
@@ -92,7 +97,7 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    currentPage = 0;
+                    currentPage = DEFAULT_PAGE;
                     dataList.clear();
                     mLoadMoreWrapper.setLoadMoreView(0);
                     mLoadMoreWrapper.notifyDataSetChanged();
@@ -126,6 +131,8 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
                 }
             });
 
+            mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
+
             initEmptyView();
             mLoadMoreWrapper = new LoadMoreWrapper(mEmptyWrapper);
             mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
@@ -144,15 +151,13 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
             }
 
             mRecyclerView.setAdapter(mLoadMoreWrapper);
-
-
         }
 
     }
 
     private void initEmptyView()
     {
-        mEmptyWrapper = new EmptyWrapper(mAdapter);
+        mEmptyWrapper = new EmptyWrapper(mHeaderAndFooterWrapper);
         mEmptyWrapper.setEmptyView(LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, mRecyclerView, false));
     }
 
@@ -177,6 +182,7 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
     private void lazyFetchDataIfPrepared() {
         if (getUserVisibleHint() && !hasFetchData && isViewPrepared) {
             hasFetchData = true;
+            mSwipeRefreshLayout.setRefreshing(true);
             lazyFetchData();
         }
     }
@@ -196,7 +202,14 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
 
     void lazyFetchData()
     {
-        new MyTask().execute(getLoadURL());
+        if(isLoadFinish)
+        {
+            new MyTask().execute(getLoadURL());
+        }
+        else
+        {
+            Logger.e("already loading…");
+        }
     }
 
 
@@ -206,6 +219,7 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            isLoadFinish = false;
         }
 
         @Override
@@ -235,7 +249,12 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
             super.onPostExecute(s);
 //            Logger.json(s);
             resloveData(s);
-            mSwipeRefreshLayout.setRefreshing(false);
+            if(mSwipeRefreshLayout!=null)
+            {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            isLoadFinish = true;
+            loadComplete();
         }
     }
 
@@ -273,5 +292,11 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
         }
         tempList.clear();
     }
+
+    protected void loadComplete()
+    {
+
+    }
+
 
 }

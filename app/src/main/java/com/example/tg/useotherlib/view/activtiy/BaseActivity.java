@@ -29,6 +29,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract View getMyContentView();
     protected abstract void initView();
 
+    protected  String title ;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         intMyContentLayout();
         initActionBar();
-        getSupportActionBar().setTitle(getIntent()!=null?getIntent().getStringExtra(TITLE):"PlayGo");
+        title = getIntent()!=null?getIntent().getStringExtra(TITLE):"PlayGo";
+        getSupportActionBar().setTitle(title);
         initView();
     }
 

@@ -7,4 +7,8 @@
 
     <string name="scale_down_show_behavior">com.example.tg.useotherlib.widget.behavior.ScaleDownShowBehavior</string>
 
+    <string name="expand">展开</string>
+    <string name="shrink">收起</string>
+
+
 </resources>
