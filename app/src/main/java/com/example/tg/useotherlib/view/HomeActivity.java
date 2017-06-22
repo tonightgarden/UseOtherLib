@@ -22,6 +22,7 @@ import com.example.tg.useotherlib.R;
 import com.example.tg.useotherlib.utils.CleanLeakUtils;
 import com.example.tg.useotherlib.view.activtiy.AboutActivity;
 import com.example.tg.useotherlib.view.activtiy.BaseActivity;
+import com.example.tg.useotherlib.view.activtiy.SearchViewActivity;
 import com.example.tg.useotherlib.view.activtiy.SettingActivity;
 import com.example.tg.useotherlib.view.fragment.ArticlePageFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
@@ -93,7 +94,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.drawer, menu);
+        Logger.i("onCreateOptionsMenu");
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Logger.i("onPrepareOptionsMenu");
+
+        if(mCurrentID == R.id.nav_video)
+        {
+            menu.findItem(R.id.action_search).setVisible(true);
+        }
+        else
+        {
+            menu.findItem(R.id.action_search).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -102,13 +119,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Logger.i("onOptionsItemSelected");
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingActivity.class).putExtra(BaseActivity.TITLE,item.getTitle()));
+            return true;
+        }
+        if(id == R.id.action_search)
+        {
+            startActivity(new Intent(this, SearchViewActivity.class).putExtra(BaseActivity.TITLE,"搜索一下"));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        Logger.i("onMenuOpened");
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        Logger.i("onOptionsMenuClosed");
+        super.onOptionsMenuClosed(menu);
     }
 
     @Override
@@ -171,6 +206,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         transaction.commit();
         currentFragmentTag = title;
+        supportInvalidateOptionsMenu();
 
     }
 

@@ -26,5 +26,37 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="both_wrap_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="settingItemImgStyle" parent="both_wrap_style">
+        <item name="android:background">@mipmap/right</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="small_tv_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="settingItemTvStyle" parent="lwrap_hmatch_style">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="lwrap_hmatch_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="both_match_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 
 </resources>

@@ -70,6 +70,8 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
 
     private boolean isLoadFinish = true;
 
+    protected boolean isAutoGetData = true;
+
     private CommonAdapter<T> mAdapter;
     private LoadMoreWrapper mLoadMoreWrapper;
     private EmptyWrapper mEmptyWrapper;
@@ -97,11 +99,7 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    currentPage = DEFAULT_PAGE;
-                    dataList.clear();
-                    mLoadMoreWrapper.setLoadMoreView(0);
-                    mLoadMoreWrapper.notifyDataSetChanged();
-                    lazyFetchData();
+                    onMyRefresh();
                 }
             });
 
@@ -155,6 +153,14 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
 
     }
 
+    public void onMyRefresh() {
+        currentPage = DEFAULT_PAGE;
+        dataList.clear();
+        mLoadMoreWrapper.setLoadMoreView(0);
+        mLoadMoreWrapper.notifyDataSetChanged();
+        lazyFetchData();
+    }
+
     private void initEmptyView()
     {
         mEmptyWrapper = new EmptyWrapper(mHeaderAndFooterWrapper);
@@ -180,6 +186,10 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
     }
 
     private void lazyFetchDataIfPrepared() {
+        if(!isAutoGetData)
+        {
+            return;
+        }
         if (getUserVisibleHint() && !hasFetchData && isViewPrepared) {
             hasFetchData = true;
             mSwipeRefreshLayout.setRefreshing(true);
@@ -249,11 +259,6 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
             super.onPostExecute(s);
 //            Logger.json(s);
             resloveData(s);
-            if(mSwipeRefreshLayout!=null)
-            {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-            isLoadFinish = true;
             loadComplete();
         }
     }
@@ -284,17 +289,30 @@ public abstract class BaseArticleFragment <T extends Data> extends BaseFragment{
                 dataList.clear();
             }
             dataList.addAll(tempList);
-            if(isCanLoadMore)
-            {
-                mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
-            }
+
             mLoadMoreWrapper.notifyDataSetChanged();
+        }else
+        {
+            Logger.d("no data");
+            mLoadMoreWrapper.setLoadMoreView(0);
+            isCanLoadMore =false;
+            mLoadMoreWrapper.notifyDataSetChanged();
+//            mLoadMoreWrapper.notifyItemChanged(mLoadMoreWrapper.getItemCount());
         }
         tempList.clear();
     }
 
     protected void loadComplete()
     {
+        if(mSwipeRefreshLayout!=null)
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        isLoadFinish = true;
+        if(isCanLoadMore)
+        {
+            mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading);
+        }
 
     }
 

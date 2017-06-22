@@ -64,7 +64,7 @@ public class VideoInfoActivity extends BaseActivity {
                     case 0:
                         return AbstractFragment.newInstance(videoInfo.getDataId());
                     case 1:
-                        return CommentFragment.newInstance("");
+                        return CommentFragment.newInstance(videoInfo.getDataId());
                 }
                 return null;
             }

@@ -31,7 +31,6 @@ public class TypeVideosActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.viewContent, TypesVideoFragment.newInstance(getIntent()!=null?getIntent().getStringExtra(TYPE_ID):"null"));

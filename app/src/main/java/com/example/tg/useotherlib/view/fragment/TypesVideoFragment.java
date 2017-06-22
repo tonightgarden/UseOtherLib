@@ -40,8 +40,13 @@ import java.util.List;
 public class TypesVideoFragment extends BaseArticleFragment<VideoTypeInfo> {
 
     String HOST = "http://api.svipmovie.com/front/";
-    String GET = "columns/getVideoList.do?catalogId=#&pnum=#";
-    String typeId;
+    String TYPE_GET = "columns/getVideoList.do?catalogId=#&pnum=#";
+    String SEARCH_GET = "searchKeyWordApi/getVideoListByKeyWord.do?keyword=#&pnum=#";
+    String GET = TYPE_GET;
+    String typeId="";
+
+    boolean isSearch = false;
+
 
     public static final String TYPE_ID = "TYPE_ID";
 
@@ -57,8 +62,25 @@ public class TypesVideoFragment extends BaseArticleFragment<VideoTypeInfo> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (getArguments() != null)
             typeId = getArguments().getString(TYPE_ID);
+        if(TextUtils.isEmpty(typeId))
+        {
+            isSearch = true;
+        }
+        if(isSearch)
+        {
+            isAutoGetData = false;
+            GET = SEARCH_GET;
+        }
         super.onCreate(savedInstanceState);
     }
+
+    public void setSearchID(String id)
+    {
+        typeId = id;
+        isCanLoadMore = true;
+        onMyRefresh();
+    }
+
 
     @Override
     protected int getViewLayoutID() {

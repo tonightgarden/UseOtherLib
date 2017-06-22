@@ -27,9 +27,10 @@
         <activity android:name=".view.activtiy.AboutActivity" />
         <activity android:name=".view.activtiy.SettingActivity" />
         <activity android:name=".view.activtiy.TypeVideosActivity" />
-        <activity android:name=".view.activtiy.VideoInfoActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            ></activity>
+        <activity
+            android:name=".view.activtiy.VideoInfoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".view.activtiy.SearchViewActivity"></activity>
     </application>
 
 </manifest>
