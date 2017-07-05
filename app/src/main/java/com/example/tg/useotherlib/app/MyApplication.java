@@ -27,10 +27,12 @@ import timber.log.Timber;
 public class MyApplication extends Application {
 
 
+    private  static   MyApplication app;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        app =this;
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
@@ -70,6 +72,11 @@ public class MyApplication extends Application {
         Utils.init(this);
         initCrash();
 
+    }
+
+    public static MyApplication getInstance()
+    {
+        return app;
     }
 
     private void initCrash() {

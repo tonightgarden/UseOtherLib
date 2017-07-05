@@ -27,6 +27,7 @@ import com.example.tg.useotherlib.view.activtiy.SettingActivity;
 import com.example.tg.useotherlib.view.fragment.ArticlePageFragment;
 import com.example.tg.useotherlib.view.fragment.BaseFragment;
 import com.example.tg.useotherlib.view.fragment.PhotoPageFragment;
+import com.example.tg.useotherlib.view.fragment.PhotoPageFragmentWithRx;
 import com.example.tg.useotherlib.view.fragment.VideoPageFragment;
 import com.orhanobut.logger.Logger;
 
@@ -186,7 +187,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (foundFragment == null) {
             switch (id) {
                 case R.id.nav_photo:
-                    foundFragment = new PhotoPageFragment();
+                    foundFragment = new PhotoPageFragmentWithRx();
                     break;
                 case R.id.nav_news:
                     foundFragment = new ArticlePageFragment();
