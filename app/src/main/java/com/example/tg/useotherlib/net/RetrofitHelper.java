@@ -66,7 +66,7 @@ public class RetrofitHelper {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request request = chain.request();
-                    if (NetworkUtils.isConnected()) {
+                    if (!NetworkUtils.isConnected()) {
                         request = request.newBuilder()
                                 .cacheControl(CacheControl.FORCE_CACHE)
                                 .build();
@@ -83,7 +83,7 @@ public class RetrofitHelper {
                     }
 
 
-                    if (NetworkUtils.isConnected()) {
+                    if (!NetworkUtils.isConnected()) {
                         int maxAge = 0;
                         // 有网络时, 不缓存, 最大保存时长为0
                         response.newBuilder()
@@ -102,9 +102,9 @@ public class RetrofitHelper {
                 }
             };
             //设置缓存
-//            builder.addNetworkInterceptor(cacheInterceptor);
-//            builder.addInterceptor(cacheInterceptor);
-//            builder.cache(cache);
+            builder.addNetworkInterceptor(cacheInterceptor);
+            builder.addInterceptor(cacheInterceptor);
+            builder.cache(cache);
             //设置超时
             builder.connectTimeout(10, TimeUnit.SECONDS);
             builder.readTimeout(20, TimeUnit.SECONDS);

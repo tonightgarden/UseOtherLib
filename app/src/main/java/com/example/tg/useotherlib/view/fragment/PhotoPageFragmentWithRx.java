@@ -166,8 +166,7 @@ public class PhotoPageFragmentWithRx extends BaseFragment {
     }
 
     private void refresh() {
-
-        RetrofitHelper.getGankApis().getGirlList(10,currentPage+1)
+         RetrofitHelper.getGankApis().getGirlList(10,currentPage+1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<HttpResult<List<PhotoBean>>>() {
